@@ -14,12 +14,12 @@ class Oystercard
   end
 
   def start_journey(station)
-    journey = {entry_station: station}
-    @journeys << journey
+    @journey = Journey.new(station)
+    @journeys << {entry_station: @journey.entry_station}
   end
 
   def end_journey(station)
-    if @journeys.empty? || !in_journey? # if they didn't touch in
+    if !in_journey? # if they didn't touch in
       start_journey("No Touch-in.") # start a journey with a spoof name
       @journeys.last[:exit_station] = station
       # self.deduct(PENALTY_FARE)
@@ -27,6 +27,7 @@ class Oystercard
     else
       @journeys.last[:exit_station] = station
       deduct(MINIMUM_FARE)
+      @journey.finish(station)
     end
   end
 
