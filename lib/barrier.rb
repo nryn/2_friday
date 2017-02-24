@@ -2,8 +2,9 @@ class Barrier
 
   attr_reader :station_name
 
-  def initialize(station_name)
+  def initialize(station_name, zone)
     @station_name = station_name
+    @zone = zone
   end
 
   def touch_in(oystercard)

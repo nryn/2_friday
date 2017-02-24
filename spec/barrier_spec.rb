@@ -1,14 +1,18 @@
 require 'barrier'
 
 describe Barrier do
-  subject(:barrier) {described_class.new("Kings Cross")}
+  subject(:barrier) {described_class.new("Kings Cross", 1)}
 
   before(:each) do
     @card = Oystercard.new
   end
 
-  it "should raise an error is no station is entered" do
+  it "should raise an error if no arguments are entered" do
     expect { Barrier.new() }.to raise_error(ArgumentError)
+  end
+
+  it "should raise an error if only one argument is entered" do
+    expect { Barrier.new("Kings Cross") }.to raise_error(ArgumentError)
   end
 
   describe '#touch_in' do
@@ -40,14 +44,14 @@ describe Barrier do
 
     it "ends the oyster card's journey" do
       allow(@card).to receive(:balance).and_return 10
-      Barrier.new("Faraway Station").touch_in(@card)
+      Barrier.new("Faraway Station", 1).touch_in(@card)
       barrier.touch_out(@card)
       expect(@card.journeys.last[:exit_station]).to eql barrier.station_name
     end
 
     it "deducts some money from the oystercard balance" do
       @card.top_up(10)
-      Barrier.new("Faraway Station").touch_in(@card)
+      Barrier.new("Faraway Station", 1).touch_in(@card)
       expect {barrier.touch_out(@card)}.to change{@card.balance}.by -Oystercard::MINIMUM_FARE
     end
 

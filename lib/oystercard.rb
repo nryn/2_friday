@@ -26,7 +26,7 @@ class Oystercard
       # charge penalty fare
     else
       @journeys.last[:exit_station] = station
-      self.deduct(MINIMUM_FARE)
+      deduct(MINIMUM_FARE)
     end
   end
 
@@ -35,13 +35,15 @@ class Oystercard
     @balance += value
   end
 
-  def deduct(value)
-    @balance -= value
-  end
-
   def in_journey?
     return false if @journeys.empty? # lol
     !@journeys.last[:exit_station] # lolol
+  end
+
+  private
+
+  def deduct(value)
+    @balance -= value
   end
 
 end
